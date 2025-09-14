@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import type { InputFieldProps } from "./InputField.types"; 
 import { Eye, EyeOff } from "lucide-react";
 

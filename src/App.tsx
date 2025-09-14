@@ -1,34 +1,43 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import DataTable from "./components/DataTable/DataTable";
 import DarkModeToggle from "./components/DarkModeToggle";
 import AddUserForm from "./components/InputField/AddUserForm";
+import type { Column } from "./components/DataTable/DataTable.types";
+
+// Define a User type
+interface User {
+  id: number;
+  username: string;
+  age: number;
+  password?: string; // optional if you don't use it in the table
+}
 
 function App() {
-  const [users, setUsers] = useState([
+  const [users, setUsers] = useState<User[]>([
     { id: 1, username: "Ankita", age: 24 },
     { id: 2, username: "Charu", age: 30 },
     { id: 3, username: "Riya", age: 28 },
   ]);
 
-  const columns = [
+  // ✅ Explicitly type columns as Column<User>[]
+  const columns: Column<User>[] = [
     { key: "username", title: "Name", dataIndex: "username", sortable: true },
     { key: "age", title: "Age", dataIndex: "age", sortable: true },
   ];
 
-  const [selectedRows, setSelectedRows] = useState<typeof users>([]);
+  const [selectedRows, setSelectedRows] = useState<User[]>([]);
 
-  const handleRowSelect = (rows: typeof users) => setSelectedRows(rows);
+  const handleRowSelect = (rows: User[]) => setSelectedRows(rows);
 
-  // Fix: use `onAdd` to match AddUserForm
   const handleAddUser = (user: {
     username: string;
     age: string;
     password: string;
   }) => {
-    const newUser = {
-      id: users.length + 1, // simple auto id
+    const newUser: User = {
+      id: users.length + 1,
       username: user.username,
-      age: Number(user.age), // ensure it's a number
+      age: Number(user.age), // convert string to number
       password: user.password,
     };
     setUsers((prev) => [...prev, newUser]);
@@ -44,7 +53,6 @@ function App() {
         Uzence Assignment
       </h1>
 
-      {/* Add User Form + DataTable */}
       <div className="flex flex-col lg:flex-row items-start gap-12 w-full max-w-6xl mx-auto">
         <AddUserForm onAdd={handleAddUser} />
 
