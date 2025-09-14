@@ -1,23 +1,11 @@
-"use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var jsx_runtime_1 = require("react/jsx-runtime");
-var react_1 = require("react");
-function DataTable(_a) {
-    var data = _a.data, columns = _a.columns, _b = _a.loading, loading = _b === void 0 ? false : _b, _c = _a.selectable, selectable = _c === void 0 ? false : _c, onRowSelect = _a.onRowSelect, _d = _a.emptyMessage, emptyMessage = _d === void 0 ? "No data available" : _d, className = _a.className;
-    var _e = (0, react_1.useState)(null), sortKey = _e[0], setSortKey = _e[1];
-    var _f = (0, react_1.useState)("asc"), sortOrder = _f[0], setSortOrder = _f[1];
-    var _g = (0, react_1.useState)([]), selectedRows = _g[0], setSelectedRows = _g[1];
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import React, { useState } from "react";
+function DataTable({ data, columns, loading = false, selectable = false, onRowSelect, emptyMessage = "No data available", className, }) {
+    const [sortKey, setSortKey] = useState(null);
+    const [sortOrder, setSortOrder] = useState("asc");
+    const [selectedRows, setSelectedRows] = useState([]);
     // Handle sorting
-    var handleSort = function (col) {
+    const handleSort = (col) => {
         if (!col.sortable)
             return;
         if (sortKey === col.dataIndex) {
@@ -28,12 +16,12 @@ function DataTable(_a) {
             setSortOrder("asc");
         }
     };
-    var sortedData = react_1.default.useMemo(function () {
+    const sortedData = React.useMemo(() => {
         if (!sortKey)
             return data;
-        return __spreadArray([], data, true).sort(function (a, b) {
-            var aVal = a[sortKey];
-            var bVal = b[sortKey];
+        return [...data].sort((a, b) => {
+            const aVal = a[sortKey];
+            const bVal = b[sortKey];
             if (aVal === bVal)
                 return 0;
             return sortOrder === "asc"
@@ -46,20 +34,20 @@ function DataTable(_a) {
         });
     }, [data, sortKey, sortOrder]);
     // Handle checkbox selection
-    var handleCheckboxChange = function (row) {
-        var newSelected = [];
+    const handleCheckboxChange = (row) => {
+        let newSelected = [];
         if (selectedRows.includes(row)) {
-            newSelected = selectedRows.filter(function (r) { return r !== row; });
+            newSelected = selectedRows.filter((r) => r !== row);
         }
         else {
-            newSelected = __spreadArray(__spreadArray([], selectedRows, true), [row], false);
+            newSelected = [...selectedRows, row];
         }
         setSelectedRows(newSelected);
-        onRowSelect === null || onRowSelect === void 0 ? void 0 : onRowSelect(newSelected);
+        onRowSelect?.(newSelected);
     };
-    return ((0, jsx_runtime_1.jsx)("div", { className: "overflow-x-auto w-full ".concat(className), children: (0, jsx_runtime_1.jsxs)("table", { className: "min-w-full border-collapse border border-gray-200 dark:border-gray-600", children: [(0, jsx_runtime_1.jsx)("thead", { className: "bg-gray-100 dark:bg-gray-800", children: (0, jsx_runtime_1.jsxs)("tr", { children: [selectable && ((0, jsx_runtime_1.jsx)("th", { className: "px-4 py-2 border-b border-gray-200 dark:border-gray-600" })), columns.map(function (col) { return ((0, jsx_runtime_1.jsxs)("th", { className: "text-left px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-600 cursor-pointer select-none", onClick: function () { return handleSort(col); }, children: [col.title, col.sortable && sortKey === col.dataIndex && ((0, jsx_runtime_1.jsx)("span", { className: "ml-1", children: sortOrder === "asc" ? "▲" : "▼" }))] }, col.key)); })] }) }), (0, jsx_runtime_1.jsx)("tbody", { children: loading ? ((0, jsx_runtime_1.jsx)("tr", { children: (0, jsx_runtime_1.jsx)("td", { colSpan: columns.length + (selectable ? 1 : 0), className: "text-center px-4 py-6 text-gray-500", children: "Loading..." }) })) : sortedData.length === 0 ? ((0, jsx_runtime_1.jsx)("tr", { children: (0, jsx_runtime_1.jsx)("td", { colSpan: columns.length + (selectable ? 1 : 0), className: "text-center px-4 py-6 text-gray-500", children: emptyMessage }) })) : (sortedData.map(function (row, rowIndex) {
-                        var isSelected = selectedRows.includes(row);
-                        return ((0, jsx_runtime_1.jsxs)("tr", { className: "hover:bg-gray-50 dark:hover:bg-gray-700 ".concat(isSelected ? "bg-blue-100 dark:bg-blue-800" : ""), children: [selectable && ((0, jsx_runtime_1.jsx)("td", { className: "px-4 py-2 text-center border-b border-gray-200 dark:border-gray-600", children: (0, jsx_runtime_1.jsx)("input", { type: "checkbox", checked: isSelected, onChange: function () { return handleCheckboxChange(row); } }) })), columns.map(function (col) { return ((0, jsx_runtime_1.jsx)("td", { className: "px-4 py-2 text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-600", children: row[col.dataIndex] }, col.key)); })] }, rowIndex));
+    return (_jsx("div", { className: `overflow-x-auto w-full ${className}`, children: _jsxs("table", { className: "min-w-full border-collapse border border-gray-200 dark:border-gray-600", children: [_jsx("thead", { className: "bg-gray-100 dark:bg-gray-800", children: _jsxs("tr", { children: [selectable && (_jsx("th", { className: "px-4 py-2 border-b border-gray-200 dark:border-gray-600" })), columns.map((col) => (_jsxs("th", { className: "text-left px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-600 cursor-pointer select-none", onClick: () => handleSort(col), children: [col.title, col.sortable && sortKey === col.dataIndex && (_jsx("span", { className: "ml-1", children: sortOrder === "asc" ? "▲" : "▼" }))] }, col.key)))] }) }), _jsx("tbody", { children: loading ? (_jsx("tr", { children: _jsx("td", { colSpan: columns.length + (selectable ? 1 : 0), className: "text-center px-4 py-6 text-gray-500", children: "Loading..." }) })) : sortedData.length === 0 ? (_jsx("tr", { children: _jsx("td", { colSpan: columns.length + (selectable ? 1 : 0), className: "text-center px-4 py-6 text-gray-500", children: emptyMessage }) })) : (sortedData.map((row, rowIndex) => {
+                        const isSelected = selectedRows.includes(row);
+                        return (_jsxs("tr", { className: `hover:bg-gray-50 dark:hover:bg-gray-700 ${isSelected ? "bg-blue-100 dark:bg-blue-800" : ""}`, children: [selectable && (_jsx("td", { className: "px-4 py-2 text-center border-b border-gray-200 dark:border-gray-600", children: _jsx("input", { type: "checkbox", checked: isSelected, onChange: () => handleCheckboxChange(row) }) })), columns.map((col) => (_jsx("td", { className: "px-4 py-2 text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-600", children: row[col.dataIndex] }, col.key)))] }, rowIndex));
                     })) })] }) }));
 }
-exports.default = DataTable;
+export default DataTable;
